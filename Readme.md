@@ -96,13 +96,13 @@ Kernels :
 To write a kernel you must be aware that the kernel functions all conform to this
 format :
 
-'''C
+```C
 __kernel void <kernel-name> ( <buffer-parameter-list> )
-'''
+```
 
 So something like these definitions :
 
-'''C
+```C
 
 
 __kernel void first(    __global uchar4* bufin,
@@ -120,8 +120,7 @@ __kernel void filter_rgba( __global uchar4* bufin,
                             __constant uf_t *cons
                            )
 
-'''
-
+```
 
 Buffers :
 =========
@@ -133,11 +132,11 @@ and the constants buffer.
 You can pass an arbitrary number of buffers to a kernel.  To inform the plug-in that
 you will do this you must define them in a kernal definition comment.
 
-'''C
+```C
 // buffer temp rw global w*h*c
 
 // kernel first bufin temp
-'''
+```
 
 What are we doing here ?
 
@@ -194,9 +193,9 @@ OpenCL menus.  Future versions may allow more flexibility, but at present that's
 A menu entry definition is easy.  Typically at the start of the OpenCL code you would
 add a comment :
 
-'''C
+```C
 // menuentry Whatever you like
-'''
+```
 
 The plug-in will use that when writing the automatically generated Script-fu file that
 registers each OpenCL filter and provides them with a UI and activation method.  You
@@ -218,7 +217,7 @@ We need mechanisms to boh define and pass paramters and constants to OpenCL.
 
 Here's an example from a filter :
 
-'''C
+```C
 // PARAM weight 0.0
 
 // kernel filter_b2b bufin bufout params
@@ -226,7 +225,7 @@ Here's an example from a filter :
 __kernel void filter_b2b( __global uchar4* bufin, __global uchar4* bufout, __constant uf_t *cons )
 {
 ...
-'''
+```
 
 This defines a parameter to be received via the UI ( or a script-fu command ) named
 "weight".  The default value is 0.0, and you can choose whatever default you want.
@@ -240,16 +239,17 @@ buffer, but you can also not use it ( as earlier examples show ).
 To access the parameters in the OpenCL code the plug-in adds a couple of defines to
 the code passed to the OpenCL compiler.  Here's how to use those :
 
-'''C
+```C
 float weight = PARAMF(0) ;
-'''
+```
+
 
 What could be simpler ?  Zero is the index of the first parameter.  PARAMF() is a
 macro ( OpenCL supports macros ), which hides the messy details of accessing the
 constants array.  Currently the prepended code is this :
 
 
-'''C
+```C
 union uf_u {
   int   	i ;
   float f ;
@@ -263,7 +263,7 @@ typedef union uf_u uf_t ;
 #define WIDTH (cons[0].i)
 #define HEIGHT (cons[1].i)
 
-'''
+```
 
 
 First note the special defines for WIDTH and HEIGHT.  If your kernel needs to know
