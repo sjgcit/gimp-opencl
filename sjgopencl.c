@@ -4,7 +4,7 @@
  *
  * (c) Stephen Geary, Dec 2013
  *
- * $Id: sjgopencl.c,v 1.44 2015/11/18 23:55:00 sjg Exp $
+ * $Id: sjgopencl.c,v 1.46 2015/11/26 05:07:50 sjg Exp $
  *
  * A major rewrite from generiffilter.c v 1.221 to add support
  * for more scripted control of multiple kernel processes.
@@ -1858,14 +1858,14 @@ static void process( char *filename, int nparams, uf_t *params )
                     SJGDEBUGF( SJG_MESSAGE_054, name ) ;
                     g_message( SJG_MESSAGE_054, name ) ;
                     
-                    g_free( layerids ) ;
+                    g_free_safe( layerids ) ;
                     
                     goto err_exit ;
                 }
                 
                 layerid = layerids[layerpos] ;
                 
-                g_free( layerids ) ;
+                g_free_safe( layerids ) ;
                 
                 gint lx1 = 0 ;
                 gint lx2 = 0 ;
@@ -2136,7 +2136,7 @@ static void process( char *filename, int nparams, uf_t *params )
              *
              * We EXPECT oclarg_list to be empty when we enter this loop.
              *
-             * This requires that of it was previously used it should have
+             * This requires that if it was previously used it should have
              * been emptied immediately after use
              */
             
@@ -2512,11 +2512,11 @@ enqueue_kernel:
             
             while( oclarg_list != NULL )
             {
-                tmparg = oclarg_list ;
+                tmparg = oclarg_list->next ;
                 
                 g_free_safe( oclarg_list ) ;
                 
-                oclarg_list = tmparg->next ;
+                oclarg_list = tmparg ;
             };
             
             continue ;
